@@ -1,0 +1,55 @@
+{% extends 'background/base.html' %}
+
+{% block title %}Customer Info{% endblock %}
+
+{% block content %}
+
+<body>
+    <h2>Customers</h2>
+    <br>
+
+    <div class="row">
+        <div class="col-md">
+            <div class="card card-body">
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th></th>
+                    </tr>
+
+                    {% for cust in customers %}
+                        <tr>
+                            <td>{{cust.first_name}} {{cust.first_name}}</td>
+                            <td>{{cust.email}}</td>
+                            <td>{{cust.phone}}</td>
+                            <td><a href="{% url 'customerinfo' cust.id %}">View</a></td>
+                            
+                        </tr>
+                    {% endfor%}
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+    <nav aria-label="Page Nav">
+        <ul class="pagination">
+            {% if customers.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ customers.previous_page_number }}">previous</a></li>
+            {% endif %}
+    
+            <span class="current">
+                <li class="page-item"><a class="page-link" href="#">Page {{ customers.number }} of {{ customers.paginator.num_pages }}</a></li>
+            </span>
+    
+            {% if customers.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ customers.next_page_number }}">next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ customers.paginator.num_pages }}">last &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</body>
+
+{% endblock %}

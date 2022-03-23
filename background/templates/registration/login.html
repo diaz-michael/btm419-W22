@@ -1,0 +1,43 @@
+{% extends "background/base.html" %}
+
+{% block title %}
+Login Here
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <table class="table" style="max-width: 60%;">
+        <tr>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Type</th>
+        </tr>
+        <tr>
+            <td>admin</td>
+            <td>password1234</td>
+            <td>SuperUser</td>
+        </tr>
+        <tr>
+            <td>employee</td>
+            <td>password1234</td>
+            <td>Employee</td>
+        </tr>
+        <tr>
+            <td>msappson6</td>
+            <td>password1234</td>
+            <td>Customer</td>
+        </tr>
+        <tr>
+            <td>acolleckj</td>
+            <td>password1234</td>
+            <td>Customer</td>
+        </tr>
+    </table>
+     <form method="post" class="from-group">
+	{% csrf_token %}
+	{{form|crispy}}
+	<p>Don't have an account? Create one <a href="/register">here</a></p>
+	<button type="submit" class="btn btn-success">Login</button>	
+    </form>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'background/base.html' %}
+
+{% block title %}{{customer.first_name}} {{customer.last_name}}{% endblock %}
+
+{% block content %}
+
+<body>
+    <div class="row">
+        <div class="col-md-3 ">
+            <div class="card mb-4">
+                <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="history.back()">Go Back</button>
+            </div>
+            <div class="card">
+                <div class="card card-body text-white bg-primary">
+                    <h5 class="card-title">{{customer.first_name}} {{customer.last_name}}</h5>
+                    <h6 class="card-subtitle mb-2">{{customer.email}}</h6>
+                    <p class="card-text">{{customer.address}}<br>
+                        {{customer.city}}, {{customer.province}}, {{customer.country}}
+                    </p>
+                    <p class="card-text">{{customer.phone}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 d-flex align-items-stretch">
+            <div class="card card-body card border-primary">
+                <h5 class="card-title">Warranties</h5>
+                <table class="table">
+                    <tr>
+                        <th>Dealership</th>
+                        <th>Products Active</th>
+                        <th>Expiry Date</th>
+                        <th>ID</th>
+                    </tr>
+                    {% for war in warranties %}
+                        <tr>
+                            <td>{{war.dealershipID}}|title</td>
+                            <td>{{war.products}}</td>
+                            <td>{{war.expiryDate|date:"M d, Y" }}</td>
+                            <td>{{war.id}}</td>
+                        </tr>
+                    {% endfor%}
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xl-5 d-flex mb-4 align-items-stretch">
+            <div class="card card-body card border-primary">
+                <h5 class="card-title">Claims</h5>
+                <table class="table">
+                    <tr>
+                        <th>Warranty ID</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>ID</th>
+                    </tr>
+                    {% for claim in claims %}
+                        <tr>
+                            <td>{{claim.warrantyID.id}}</td>
+                            <td>{{claim.description}}</td>
+                            <td>{{claim.date|date:"M d, Y" }}</td>
+                            <td>{{claim.get_status_display}}</td>
+                            <td>{{claim.id}}</td>
+                        </tr>
+                    {% endfor%}
+                </table>
+            </div>
+        </div>
+        <div class="col-xl-7 d-flex align-items-stretch">
+            <div class="card card-body card border-primary">
+                <h5 class="card-title">Inspections</h5>
+                <table class="table">
+                    <tr>
+                        <th>Claim ID</th>
+                        <th>VIN</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Colour</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>ID</th>
+                    </tr>
+                    {% for ins in inspections %}
+                        <tr>
+                            <td>{{ins.claimID.id}}</td>
+                            <td>{{ins.vin|make_list|slice:":8"|join:""}}<wbr>{{ins.vin|make_list|slice:"9:"|join:""}}</td>
+                            <td>{{ins.make}}</td>
+                            <td>{{ins.model}}</td>
+                            <td>{{ins.year}}</td>
+                            <td>{{ins.colour}}</td>
+                            <td>{{ins.get_status_display}}</td>
+                            <td>{{ins.scheduledDate|date:"M d, Y" }}</td>
+                            <td>{{ins.id}}</td>
+                        </tr>
+                    {% endfor%}
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+</body>
+
+{% endblock %}

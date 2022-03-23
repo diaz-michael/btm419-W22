@@ -1,0 +1,27 @@
+{% extends 'background/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<body>
+    <h2>Physical Products</h2>
+    <p>Are you a warranty customer? Please <a href="{% url 'login' %}">login</a> to view your account</p>
+    <div class="row">
+        {% for prod in products%}
+            <div class="col-sm-4">
+                <div class="card mb-3">
+                    <img src="{{ prod.image.url }}" class="img-fluid card-img-top" alt="{{prod.name}}" style="max-height: 15vw; object-fit: cover;" >
+                    <div class="card-body">
+                    <h5 class="card-title">{{prod.name}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{prod.category}}</h6>
+                    <p class="card-text">{{prod.description}}</p>
+                    <p>Only ${{prod.price}}!</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+
+{% endblock %}
