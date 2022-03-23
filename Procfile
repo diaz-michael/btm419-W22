@@ -1,0 +1,1 @@
+web: gunicorn c3protoype.wsgi --log-file -

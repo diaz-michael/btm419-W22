@@ -1,6 +1,8 @@
 # Text backup files
 *.bak
 
+
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,django
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,django
 
@@ -134,6 +136,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+virtualenv/
 
 # Spyder project settings
 .spyderproject
