@@ -1,0 +1,19 @@
+
+{% extends 'background/base.html' %}
+
+
+
+
+{% block content %}
+<h2>Reporting</h2>
+<br>
+
+<div class="btn-group" role="group" aria-label="Basic outlined example">
+    <a class="btn btn-outline-danger">Claims</a>
+    <a class="btn btn-outline-primary" href="{% url 'reporting:inspection' %}">Inspections</a>
+    <a class="btn btn-outline-danger">Sales</a>
+    <a class="btn btn-outline-primary" href="{% url 'reporting:inventory' %}">Inventory</a>
+</div>
+
+{% endblock %}
+

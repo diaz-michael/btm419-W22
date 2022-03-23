@@ -14,5 +14,9 @@ class order(models.Model):
     productID = models.ForeignKey('background.product', on_delete=models.PROTECT)
     discount = models.DecimalField(max_digits=3, decimal_places=2)
     quantity = models.IntegerField()
+    
+    def list(self):
+        return self.id
+    
     def __str__(self):
         return "#"+ str(self.id) + "| " + str(self.productID)

@@ -1,0 +1,32 @@
+{% extends 'background/base.html' %}
+
+{% block content %}
+
+<h1>Inspections</h1>
+    
+<div class="row">
+    <div class="col-md-8 d-flex align-items-stretch">
+        <div class="card card-body card border-primary">
+            <h5 class="card-title">Inspections Table</h5>
+            <table class="table">
+                <tr>
+                    <th>Claim</th>
+                    <th>VIN</th>
+                    <th>Status</th>
+                    <th>Scheduled Date</th>
+                    <th>ClaimID</th>
+                </tr>
+                {% for inspection in inspection_list %}
+                <tr>
+                    <td>{{inspection.claimID}}</td>
+                    <td>{{inspection.vin}}</td>
+                    <td>{{inspection.get_status_display}}</td>
+                    <td>{{inspection.scheduledDate}}</td>
+                    <td>{{inspection.claimID_id}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

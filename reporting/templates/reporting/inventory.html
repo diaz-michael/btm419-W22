@@ -1,0 +1,30 @@
+{% extends 'background/base.html' %}
+
+{% block content %}
+
+<h1>Inventory</h1>
+    
+<div class="row">
+    <div class="col-md-6 d-flex align-items-stretch">
+        <div class="card card-body card border-primary">
+            <h5 class="card-title">Inventory Orders Tables</h5>
+            <table class="table">
+                <tr>
+                    <th>OrderID</th>
+                    <th>ProductID</th>
+                    <th>Quantity</th>
+                    <th>Order FormID</th>
+                </tr>
+                {% for order in inventory_list %}
+                <tr>
+                    <td>{{order.id}}</td>
+                    <td>{{order.productID_id}}</td>
+                    <td>{{order.quantity}}</td>
+                    <td>{{order.order_formID_id}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

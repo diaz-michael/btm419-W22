@@ -56,5 +56,8 @@ class inspection(models.Model):
         default='Sc',
     )
     scheduledDate = models.DateTimeField()
+    def list(self):
+        return self.id
+
     def __str__(self):
         return  "#"+ str(self.id) + "| " + str(self.year) + " " + self.colour + " " +  self.make + " " +  self.model
