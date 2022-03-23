@@ -1,1 +1,1 @@
-web: gunicorn c3protoype.wsgi --log-file -
+web: gunicorn c3prototype.wsgi --log-file -
