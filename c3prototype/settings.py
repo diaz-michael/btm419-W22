@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'inspections',
     'inventory',
     'crispy_forms',
-    'reporting',
+    'reporting'
 ]
 
 MIDDLEWARE = [
