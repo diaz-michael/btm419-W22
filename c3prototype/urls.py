@@ -25,7 +25,7 @@ urlpatterns = [
     path("register/", BGv.register, name="register"), 
     path('', include('background.urls')),
     path('', include("django.contrib.auth.urls")),
-    path('reporting/', include('reporting.urls', namespace='reporting'))
+    path('reporting/', include('reporting.urls', namespace='reporting')),
 ]
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

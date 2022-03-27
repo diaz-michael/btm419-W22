@@ -1,4 +1,3 @@
-from operator import mod
 from django.db import models
 
 # Create your models here.
@@ -41,4 +40,4 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     image = models.ImageField(upload_to = 'images/product')
     def __str__(self):
-        return self.name
+        return self.name + ",  @$" + str(self.price)
