@@ -18,12 +18,19 @@ class order_form(models.Model):
     def get_order_form_children(self):
         return self.order_set.all()
 
+    def get_order_form_total(self):
+        children = self.get_order_form_children()
+        total = 0
+        for child in children:
+            total = total + ((1 - child.discount) * child.price * child.quantity)
+        return total
+
 class order(models.Model):
     order_formID = models.ForeignKey(order_form, on_delete=models.PROTECT)
     productID = models.ForeignKey('background.product', on_delete=models.PROTECT)
     discount = models.DecimalField(max_digits=3, decimal_places=2, blank=True, default=0)
     quantity = models.IntegerField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
     
     def list(self):
         return self.id
@@ -33,3 +40,7 @@ class order(models.Model):
 
     def get_absolute_url(self):
         return self.order_formID.get_absolute_url()
+
+    def save(self, *args, **kwargs):
+        self.price = self.productID.price
+        super(order, self).save(*args, **kwargs)

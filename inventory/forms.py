@@ -1,4 +1,6 @@
 from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Div, Field
 
 # based on https://github.com/codingforentrepreneurs/Try-Django-3.2
 
@@ -10,7 +12,7 @@ class order_formForm(forms.ModelForm):
     # descriptions = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
     class Meta:
         model = order_form
-        fields = ['dealershipID', 'salespersonID']
+        fields = ['dealershipID', 'salespersonID', 'id']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,13 +25,34 @@ class order_formForm(forms.ModelForm):
             self.fields[str(field)].widget.attrs.update(
                 new_data
             )
-        # self.fields['name'].label = ''
-        # self.fields['name'].widget.attrs.update({'class': 'form-control-2'})
-        #self.fields['dealershipID'].widget.attrs.update({'rows': '2'})
-        #self.fields['salespersonID'].widget.attrs.update({'rows': '4'})
 
 
 class orderForm(forms.ModelForm):
+     
     class Meta:
         model = order
-        fields = ['productID', 'discount', 'quantity']
+        fields = ['productID', 'discount', 'quantity', 'price']
+        widgets = {
+            'price': forms.TextInput(attrs={'readonly': True}),
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # django-crispy-forms
+        for field in self.fields:
+            new_data = {
+                "placeholder": f'order_form {str(field)}',
+                "class": 'form-control'
+            }
+            self.fields[str(field)].widget.attrs.update(
+                new_data
+            )
+        # Formatting not working
+        # helper = FormHelper()
+        # helper.layout = Layout(
+        #     Div(
+        #         Field('productID', wrapper_class='col-md-12'),
+        #         Field('discount', wrapper_class='col-md-4'),
+        #         Field('quantity', wrapper_class='col-md-4'),  
+        #         Field('price', wrapper_class='col-md-4'),
+        #     css_class='form-row'))
+        self.fields['productID'].label = 'Product'
