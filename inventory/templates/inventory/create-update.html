@@ -1,0 +1,48 @@
+{% extends "background\base.html" %}
+
+
+{% block content %}
+
+<style>
+    .order-form {
+        border-bottom: 1px solid black;
+    }
+    .hidden {
+        display: none
+    }
+</style>
+
+<div style='margin-top:30px;'>
+    {% include 'inventory/partials/forms.html' %}
+</div>
+
+<script>
+    
+    const addMoreBtn = document.getElementById('add-more')
+    const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+    
+    addMoreBtn.addEventListener('click', add_new_form)
+    function add_new_form(event) {
+        if (event) {
+            event.preventDefault()
+        }
+        const currentOrderForms = document.getElementsByClassName('order-form')
+        const currentFormCount = currentOrderForms.length // + 1
+        const formCopyTarget = document.getElementById('order-form-list')
+        const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
+        copyEmptyFormEl.setAttribute('class', 'order-form')
+        copyEmptyFormEl.setAttribute('id', `form-${currentFormCount}`)
+        const regex = new RegExp('__prefix__', 'g')
+        copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currentFormCount)
+        totalNewForms.setAttribute('value', currentFormCount + 1)
+        // now add new empty form element to our html form
+        formCopyTarget.append(copyEmptyFormEl)
+    }
+    
+
+
+</script>
+
+
+
+{% endblock content %}

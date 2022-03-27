@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class order_form(models.Model):
@@ -6,7 +7,16 @@ class order_form(models.Model):
     salespersonID = models.ForeignKey('background.employee', on_delete=models.PROTECT)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return "#"+ str(self.id) + "| " + str(self.dealershipID) + " via: " + str(self.salespersonID)
+        return "#"+ str(self.id) + " | " + str(self.dealershipID).title() + " via: " + str(self.salespersonID)
+
+    def get_absolute_url(self):
+        return reverse("inventory:detail", kwargs={"id": self.id})
+
+    def get_edit_url(self):
+        return reverse("inventory:update", kwargs={"id": self.id})
+
+    def get_order_form_children(self):
+        return self.order_set.all()
 
 class order(models.Model):
     order_formID = models.ForeignKey(order_form, on_delete=models.PROTECT)
@@ -19,4 +29,7 @@ class order(models.Model):
         return self.id
     
     def __str__(self):
-        return "#"+ str(self.id) + "| " + str(self.productID)
+        return "#"+ str(self.id) + " | " + str(self.productID)
+
+    def get_absolute_url(self):
+        return self.order_formID.get_absolute_url()

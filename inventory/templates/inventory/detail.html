@@ -1,0 +1,17 @@
+<!-- https://github.com/codingforentrepreneurs/Try-Django-3.2 -->
+{% extends "background/base.html" %}
+
+
+{% block content %}
+
+<h1>{{ object.dealershipID }} {% if object.get_edit_url %}<small><a href='{{ object.get_edit_url }}'>Edit</a></small>{% endif %}</h1>
+<p>Salesperson: {{ object.salespersonID }}</p>
+
+{% for order in object.get_order_form_children %}
+<h1>{{ order.productID }}</h1>
+<p>{{ order.discount }}</p>
+<p>{{ order.quantity }}</p>
+<p>{{ order.price }}</p>
+{% endfor %}
+
+{% endblock content %}

@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('background.urls')),
     path('', include("django.contrib.auth.urls")),
     path('reporting/', include('reporting.urls', namespace='reporting')),
+    path('inventory/orders/', include('inventory.urls')),
 ]
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

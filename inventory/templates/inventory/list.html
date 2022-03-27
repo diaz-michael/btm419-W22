@@ -1,0 +1,12 @@
+{% extends "background/base.html" %}
+
+{% block content %}
+<h1>Orders</h1>
+<a href='{% url "inventory:create" %}'>New Order</a>
+<ul>
+    {% for x in object_list %}
+        <li><a href='{{ x.get_absolute_url }}'>{{ x }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}
