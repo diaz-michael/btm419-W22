@@ -16,7 +16,7 @@ def home(request):
                     context = {"products":Product.objects.all})
     else:
         if request.user.is_staff:
-            customers = Customer.objects.all() 
+            customers = Customer.objects.all().order_by('email') 
         else:
             customers = Customer.objects.filter(email = request.user.email) 
         

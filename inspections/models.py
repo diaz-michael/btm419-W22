@@ -1,6 +1,6 @@
 from bdb import effective
 from django.db import models
-
+from django.urls import reverse
 
 # Create your models here.
 class warranty(models.Model):
@@ -61,3 +61,9 @@ class inspection(models.Model):
 
     def __str__(self):
         return  "#"+ str(self.id) + "| " + str(self.year) + " " + self.colour + " " +  self.make + " " +  self.model
+
+    def get_absolute_url(self):
+        return reverse("inspections:detail", kwargs={"id": self.id})
+
+    def get_edit_url(self):
+        return reverse("inspections:update", kwargs={"id": self.id})

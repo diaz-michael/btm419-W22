@@ -1,0 +1,41 @@
+{% extends "background/base.html" %}
+
+{% load mathfilters %}
+{% block content %}
+
+<h2>Inspection ID: #{{ inspection.id }}</h2>
+<h3>Vehicle is a {{ inspection.year }} {{ inspection.colour }} {{ inspection.make }} {{ inspection.model }}</h3>
+<p>VIN: {{ inspection.vin}}</p>
+<p>Scheduled Date: {{ inspection.scheduledDate}}</p>
+<p>Status: {{ inspection.get_status_display}}</p>
+<div class="card mb-4">
+    <a  type="button" class="btn btn-primary btn-lg btn-block" href='{{ inspection.get_edit_url }}'>Edit Inspection</a>
+</div>
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h5 class="card-title">Inspection Notes</h5>
+            <table class="table">
+                <tr>
+                    <th>Technician Name</th>
+                    <th>Note</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+
+                    <tr>
+                        <td>B Flanagan</td>
+                        <td><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam elementum vestibulum aliquam. Aenean nec justo bibendum magna imperdiet pretium id nec ipsum. Morbi maximus volutpat dolor, quis lacinia nisi lacinia quis. Nunc vitae vehicula neque, at ornare nisl. Integer fermentum blandit eleifend. Donec ante nisi, congue a semper at, porttitor id diam. Quisque pulvinar orci sed justo varius pulvinar.</p>
+                            <p>rutrum lacus nibh, quis faucibus justo luctus vitae. Morbi quis ex lorem. Ut dictum, nisl ut ultricies ornare, urna turpis blandit urna, a sollicitudin tortor ex vel ex. Vivamus pretium orci sed erat semper, finibus condimentum leo placerat. Sed luctus risus quis risus consectetur, id venenatis nisi rutrum.</p></td>
+                        <td>April 1, 2022</td>
+                        <td>4:00pm</td>
+                    </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="card mb-4">
+    <a  type="button" class="btn btn-secondary btn-lg btn-block" href='#'>Edit Notes</a>
+</div>
+
+{% endblock content %}
