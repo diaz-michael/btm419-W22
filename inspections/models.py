@@ -3,6 +3,10 @@ from django.db import models
 from django.urls import reverse
 
 # Create your models here.
+class warrantyManager(models.Manager):
+    def get_queryset(self):
+        return super(warrantyManager, self).get_queryset().select_related()
+
 class warranty(models.Model):
     dealershipID = models.ForeignKey('background.Dealership', on_delete=models.PROTECT)
     customerID = models.ForeignKey('background.Customer', on_delete=models.PROTECT)
@@ -12,8 +16,13 @@ class warranty(models.Model):
     effectiveDate = models.DateTimeField()
     expiryDate = models.DateTimeField()
     timestamp = models.DateTimeField(auto_now=True)
+    objects = warrantyManager()
     def __str__(self):
         return "#"+ str(self.id) + "| " + str(self.customerID)
+
+class claimManager(models.Manager):
+    def get_queryset(self):
+        return super(claimManager, self).get_queryset().select_related()
 
 class claim(models.Model):
     warrantyID = models.ForeignKey(warranty, on_delete=models.PROTECT)
@@ -35,8 +44,13 @@ class claim(models.Model):
     )
     date = models.DateTimeField(auto_now_add=True)
     timestamp = models.DateTimeField(auto_now=True)
+    objects = claimManager()
     def __str__(self):
         return "#"+ str(self.id) + "| " + str(self.warrantyID)
+
+class inspectionManager(models.Manager):
+    def get_queryset(self):
+        return super(inspectionManager, self).get_queryset().select_related()
 
 class inspection(models.Model):
     claimID = models.ForeignKey(claim, on_delete=models.PROTECT)
@@ -56,6 +70,7 @@ class inspection(models.Model):
         default='Sc',
     )
     scheduledDate = models.DateTimeField()
+    objects = inspectionManager()
     def list(self):
         return self.id
 

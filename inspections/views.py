@@ -13,20 +13,8 @@ def index(request):
 
 @login_required
 def inspections_all(request):
-    """The inpections page"""
-    # claim_list = claim.objects.all()
-    # inspection_list = inspection.objects.all()
-    # warranty_list = warranty.objects.all()
-    # customer_list = Customer.objects.all()
-    # dealership_list = Dealership.objects.all()
 
-    # context = {'claim_list': list(claim_list), 'inspection_list': (inspection_list),'warranty_list': warranty_list,'customer_list': customer_list,'dealership_list': dealership_list },
-
-    #print(inventory_list)
-
-    inspections = inspection.objects.all().order_by("-scheduledDate")
-    # Product.objects.all().filter(sub_category__category_id=category_id).select_related('parent')
-
+    inspections = inspection.objects.all().select_related('claimID').select_related('claimID__warrantyID').select_related('claimID__warrantyID__customerID').select_related('claimID__warrantyID__dealershipID').order_by("-scheduledDate")
 
     context = {'inspections':inspections}
     return render(request, 'inspections/inspections_table.html', context)
@@ -41,7 +29,7 @@ def inspection_detail_view(request, id=None):
 
 @login_required
 def inspection_update_view(request, id=None):
-    obj = get_object_or_404(inspection, id=id)
+    obj = get_object_or_404(inspection.objects.select_related('claimID').select_related('claimID__warrantyID').select_related('claimID__warrantyID__customerID'), id=id)
     form = inspectionForm(request.POST or None, instance=obj)
     context = {
         "form": form,

@@ -10,7 +10,7 @@ from .models import order_form, order
 
 @login_required
 def order_form_list_view(request):
-    qs = order_form.objects.all().order_by('-id')
+    qs = order_form.objects.all().prefetch_related('order_set').select_related('dealershipID').select_related('salespersonID').order_by('-id')
     
     paginator = Paginator(qs, 50)
     page_number = request.GET.get('page')
@@ -23,7 +23,7 @@ def order_form_list_view(request):
 
 @login_required
 def order_form_detail_view(request, id=None):
-    obj = get_object_or_404(order_form, id=id) 
+    obj = get_object_or_404(order_form.objects.prefetch_related('order_set').prefetch_related('order_set__productID').select_related('dealershipID').select_related('salespersonID'), id=id) 
     context = {
         "object": obj
     }
