@@ -1,3 +1,4 @@
+from operator import concat
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserChangeForm
@@ -17,9 +18,19 @@ def home(request):
     else:
         if request.user.is_staff:
             customers = Customer.objects.all()
+            header = "Customer List"
+            table_css_id = "tableDB"
         else:
             customers = Customer.objects.filter(email = request.user.email) 
-        return render(request, 'background/customers.html', {'customers':customers})
+            customer = customers.first().first_name
+            header = "Welcome " + customer + "!"
+            table_css_id = "tableOne"
+        context = {
+            "customers": customers,
+            "header": header,
+            "table_css_id": table_css_id,
+        }
+        return render(request, 'background/customers.html', context)
 
 def customerinfo(request, pk):
     customer = Customer.objects.get(id=pk)
