@@ -1,0 +1,30 @@
+<!-- Toasts Styling -->
+<style>
+  .notification {
+    position: absolute;
+    bottom: 2rem;
+    right: 1rem;
+  }
+</style>
+
+{% for message in messages %}
+  <div class="toast notification bg-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+    <div class="toast-header">
+      <strong class="me-auto">
+        {% if message.tags == 'error' %}
+          <i>Error!</i>
+        {% elif message.tags == 'warning' %}
+          <i>Warning!</i>
+        {% elif message.tags == 'info' %}
+          <i>Info.</i>
+        {% elif message.tags == 'success' %}
+          <i>Success!</i>
+        {% endif %}
+        <!-- {{message.tags|capfirst}} -->
+      </strong>
+    </div>
+    <div class="toast-body">
+      {{message|safe}}
+    </div>
+  </div>
+{% endfor %}

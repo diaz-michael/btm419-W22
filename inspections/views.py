@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 
 # from itertools import product
 
@@ -35,11 +36,12 @@ def inspection_update_view(request, id=None):
         "form": form,
         "object": obj
     }
+    
     if form.is_valid():
         ins = form.save(commit=False)
+        messages.success(request, "Inspection updated successfully!")
         ins.save()
         # formset.save()
-        context['message'] = 'Order saved.'
     return render(request, "inspections/create-update.html", context) 
 
 def inspection_create_view(request):

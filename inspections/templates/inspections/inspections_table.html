@@ -1,5 +1,4 @@
 {% extends 'background/base.html' %}
-
 {% block content %}
 <div class="row">
     <div class="d-grid col-md-2">
@@ -10,43 +9,62 @@
     </div>
 </div>
 <br>
-    <div class="card mb-4">
-        <a  type="button" class="btn btn-primary btn-lg btn-block" href='{% url "inspections:create" %}'>New Inspection</a>
-    </div>
+<div class="card mb-4">
+    <a type="button" class="btn btn-primary btn-lg btn-block" href='{% url "inspections:create" %}'>New Inspection</a>
+</div>
 <div class="row">
     <div class="col-md-12 d-flex align-items-stretch">
         <div class="card card-body card border-primary">
             <h5 class="card-title">Inspections Table</h5>
-            <table class="table">
-                <tr>
-                    <th>Claim ID</th>
-                    <th>Customer</th>
-                    <th>VIN</th>
-                    <th>Make</th>
-                    <th>Model</th>
-                    <th>Year</th>
-                    <th>Colour</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>ID</th>
-                </tr>
-                {% for ins in inspections %}
-                <tr>
-                    <td>{{ins.claimID.id}}</td>
-                    <td>{{ins.claimID.warrantyID.customerID.first_name}} {{ins.claimID.warrantyID.customerID.last_name}}</td>
-                    <td>{{ins.vin|make_list|slice:":8"|join:""}}<wbr>{{ins.vin|make_list|slice:"9:"|join:""}}</td>
-                    <td>{{ins.make}}</td>
-                    <td>{{ins.model}}</td>
-                    <td>{{ins.year}}</td>
-                    <td>{{ins.colour}}</td>
-                    <td>{{ins.get_status_display}}</td>
-                    <td>{{ins.scheduledDate|date:"M d, Y" }}</td>
-                    <td>{{ins.id}} <a href='{{ ins.get_absolute_url }}'>View</a></td>
-                </tr>
-                {% endfor %}
+            <table id="table_db" class="table">
+                <thead>
+                    <tr>
+                        <th>Claim ID</th>
+                        <th>Customer</th>
+                        <th>VIN</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Colour</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for ins in inspections %}
+                    <tr>
+
+                        <td>{{ins.claimID.id}}</td>
+                        <td>{{ins.claimID.warrantyID.customerID.first_name}}
+                            {{ins.claimID.warrantyID.customerID.last_name}}
+                        </td>
+                        <td>{{ins.vin|make_list|slice:":8"|join:""}}<wbr>{{ins.vin|make_list|slice:"9:"|join:""}}</td>
+                        <td>{{ins.make}}</td>
+                        <td>{{ins.model}}</td>
+                        <td>{{ins.year}}</td>
+                        <td>{{ins.colour}}</td>
+                        <td>{{ins.get_status_display}}</td>
+                        <td>{{ins.scheduledDate|date:"Y-m-d" }}</td>
+                        <td>{{ins.id}} <a href='{{ ins.get_absolute_url }}'>View</a></td>
+                        {% endfor %}
+                    </tr>
+
+                </tbody>
             </table>
         </div>
     </div>
 </div>
-
+{% endblock %}
+{% block js %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<!-- https://datatables.net/blog/2014-12-18 -->
+<script>
+    $(document).ready(function () {
+        $('#table_db').DataTable();
+    });
+</script>
+</div>
 {% endblock %}

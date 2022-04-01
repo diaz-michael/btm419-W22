@@ -59,7 +59,7 @@ class warranty(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     objects = warrantyManager()
     def __str__(self):
-        return "#"+ str(self.id) + "| " + str(self.customerID)
+        return "W"+ str(self.id) + "| " + str(self.customerID)
 
 class claimManager(models.Manager):
     def get_queryset(self):
@@ -86,8 +86,12 @@ class claim(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     timestamp = models.DateTimeField(auto_now=True)
     objects = claimManager()
+
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self):
-        return "#"+ str(self.id) + "| " + str(self.warrantyID)
+        return "C"+ str(self.id) + "| " + str(self.warrantyID)
 
 class inspectionManager(models.Manager):
     def get_queryset(self):
@@ -119,7 +123,7 @@ class inspection(models.Model):
         return self.id
 
     def __str__(self):
-        return  "#"+ str(self.id) + "| " + str(self.year) + " " + self.colour + " " +  self.make + " " +  self.model
+        return  "I"+ str(self.id) + "| " + str(self.year) + " " + self.colour + " " +  self.make + " " +  self.model
 
     def get_absolute_url(self):
         return reverse("inspections:detail", kwargs={"id": self.id})
