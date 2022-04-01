@@ -12,11 +12,8 @@ from .models import order_form, order
 def order_form_list_view(request):
     qs = order_form.objects.all().prefetch_related('order_set').select_related('dealershipID').select_related('salespersonID').order_by('-id')
     
-    paginator = Paginator(qs, 50)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
     context = {
-        "object_list": page_obj
+        "object_list": qs
     }
     return render(request, "inventory/list.html", context)
 

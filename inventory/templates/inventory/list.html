@@ -1,10 +1,5 @@
 {% extends "background/base.html" %}
 {% block content %}
-<!-- <ul>
-    {% for x in object_list %}
-        <li><a href='{{ x.get_absolute_url }}'>{{ x }}</a></li>
-    {% endfor %}
-</ul> -->
 
 <div class="row">
     <div class="d-grid col-md-2">
@@ -15,13 +10,14 @@
     </div>
 </div>
 <br>
-    <div class="card mb-4">
-        <a  type="button" class="btn btn-primary btn-lg btn-block" href='{% url "inventory:create" %}'>New Order</a>
-    </div>
-    <div class="row">
-        <div class="col-md">
-            <div class="card card-body">
-                <table class="table">
+<div class="card mb-4">
+    <a type="button" class="btn btn-primary btn-lg btn-block" href='{% url "inventory:create" %}'>New Order</a>
+</div>
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <table id="table_db" class="table">
+                <thead>
                     <tr>
                         <th>Order Number</th>
                         <th>Dealership</th>
@@ -29,38 +25,33 @@
                         <th>Total</th>
                         <th></th>
                     </tr>
-
+                </thead>
+                <tbody>
                     {% for order in object_list %}
-                        <tr>
-                            <td>#{{order.id}}</td>
-                            <td>{{order.dealershipID}}</td>
-                            <td>{{order.salespersonID}}</td>
-                            <td>${{order.get_order_form_total|floatformat:2}}</td>
-                            <td><a href='{{ order.get_absolute_url }}'>View</a></td>
-                            
-                        </tr>
+                    <tr>
+                        <td>{{order.id}}</td>
+                        <td>{{order.dealershipID}}</td>
+                        <td>{{order.salespersonID}}</td>
+                        <td>${{order.get_order_form_total|floatformat:2}}</td>
+                        <td><a href='{{ order.get_absolute_url }}'>View</a></td>
+
+                    </tr>
                     {% endfor%}
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
-    <br>
-    <nav aria-label="Page Nav">
-        <ul class="pagination">
-            {% if customers.has_previous %}
-                <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ object_list.previous_page_number }}">previous</a></li>
-            {% endif %}
-    
-            <span class="current">
-                <li class="page-item"><a class="page-link" href="#">Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}</a></li>
-            </span>
-    
-            {% if object_list.has_next %}
-                <li class="page-item"><a class="page-link" href="?page={{ object_list.next_page_number }}">next</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ object_list.paginator.num_pages }}">last &raquo;</a></li>
-            {% endif %}
-        </ul>
-    </nav>
+</div>
+<br>
 
-{% endblock content %}
+{% endblock %}
+{% block js %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#table_db').DataTable();
+    });
+</script>
+</div>
+{% endblock %}
