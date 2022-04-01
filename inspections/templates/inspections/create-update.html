@@ -1,26 +1,53 @@
 {% extends "background/base.html" %}
-
+{% load crispy_forms_tags %}
 
 {% block content %}
 
 <div style='margin-top:30px;'>
-    <form action='.' method="POST">
-        {% csrf_token %}
-        <h3>Inspection Info</h3>
-       {% for field in form %}
-       <div class='{% if field.field.required %}{{ form.required_css_class }}{%endif%}'>
-        {{ field.errors }}   
-        {{ field.label_tag }} {{ field }}
-        {% if field.help_text %}
-            <p class="help">{{ field.help_text|safe }}</p>
-        {% endif %}
-        </div>
-       {% endfor %}
-        <button style='margin-top:10px;' type='submit' >Save</button>
-        
-        {% if message %}
-        <h3>{{ message }}</h3>
-        {% endif %}
-    </form>
+  <form method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-8 mb-0">
+        {{ form.claimID|as_crispy_field }}
+      </div>
+      <div class="col-md-4 mb-0">
+        {{ form.status|as_crispy_field }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-0">
+        {{ form.vin|as_crispy_field }}
+      </div>
+      <div class="col-md-4 mb-0">
+        {{ form.colour|as_crispy_field }}
+      </div>
+      <div class="col-md-2 mb-0">
+        {{ form.year|as_crispy_field }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-0">
+        {{ form.make|as_crispy_field }}
+      </div>
+      <div class="col-md-6 mb-0">
+        {{ form.model|as_crispy_field }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-0">
+        {{ form.scheduledDate|as_crispy_field }}
+      </div>
+      <div class="col-md-6 mb-0">
+        {{ form.scheduledTime|as_crispy_field }}
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Inspection</button>
+  </form>
+
 </div>
+<!-- Force select fields to select class -->
+<script>
+  document.getElementById("id_claimID").className = "form-select";
+  document.getElementById("id_status").className = "form-select";
+</script>
 {% endblock content %}

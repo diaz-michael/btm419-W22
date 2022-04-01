@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 
+#based on https://gist.github.com/krisneuharth/2176789
 def validate_vin(value):
     POSITIONAL_WEIGHTS = [8,7,6,5,4,3,2,10,0,9,8,7,6,5,4,3,2]
     ILLEGAL_ALL = ['I', 'O', 'Q']
@@ -111,7 +112,8 @@ class inspection(models.Model):
         choices=STATUS_CHOICES,
         default='Sc',
     )
-    scheduledDate = models.DateTimeField()
+    scheduledDate = models.DateField()
+    scheduledTime = models.TimeField()
     objects = inspectionManager()
     def list(self):
         return self.id

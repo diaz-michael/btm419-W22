@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ["btm419-2022yellow.herokuapp.com",'127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -175,3 +177,4 @@ mimetypes.add_type("application/javascript", ".js", True)
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
