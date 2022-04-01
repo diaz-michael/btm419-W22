@@ -16,14 +16,10 @@ def home(request):
                     context = {"products":Product.objects.all})
     else:
         if request.user.is_staff:
-            customers = Customer.objects.all().order_by('email') 
+            customers = Customer.objects.all()
         else:
             customers = Customer.objects.filter(email = request.user.email) 
-        
-        paginator = Paginator(customers, 50)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        return render(request, 'background/customers.html', {'customers':page_obj})
+        return render(request, 'background/customers.html', {'customers':customers})
 
 def customerinfo(request, pk):
     customer = Customer.objects.get(id=pk)

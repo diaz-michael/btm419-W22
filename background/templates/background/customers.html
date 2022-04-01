@@ -11,45 +11,43 @@
     <div class="row">
         <div class="col-md">
             <div class="card card-body">
-                <table class="table">
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th></th>
-                    </tr>
-
-                    {% for cust in customers %}
+                <table id="table_db" class="table">
+                    <thead>
                         <tr>
-                            <td>{{cust.first_name}} {{cust.first_name}}</td>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>City</th>
+                            <th>Province</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cust in customers %}
+                        <tr>
+                            <td><a href="{% url 'customerinfo' cust.id %}">{{cust.first_name}} {{cust.last_name}}</a></td>
                             <td>{{cust.email}}</td>
                             <td>{{cust.phone}}</td>
-                            <td><a href="{% url 'customerinfo' cust.id %}">View</a></td>
-                            
+                            <td>{{cust.city}}</td>
+                            <td>{{cust.province}}</td>
+
                         </tr>
-                    {% endfor%}
+                        {% endfor%}
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <br>
-    <nav aria-label="Page Nav">
-        <ul class="pagination">
-            {% if customers.has_previous %}
-                <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ customers.previous_page_number }}">previous</a></li>
-            {% endif %}
-    
-            <span class="current">
-                <li class="page-item"><a class="page-link" href="#">Page {{ customers.number }} of {{ customers.paginator.num_pages }}</a></li>
-            </span>
-    
-            {% if customers.has_next %}
-                <li class="page-item"><a class="page-link" href="?page={{ customers.next_page_number }}">next</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ customers.paginator.num_pages }}">last &raquo;</a></li>
-            {% endif %}
-        </ul>
-    </nav>
 </body>
 
+{% endblock %}
+
+{% block js %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#table_db').DataTable();
+    });
+</script>
+</div>
 {% endblock %}

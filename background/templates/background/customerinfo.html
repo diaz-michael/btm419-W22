@@ -25,12 +25,15 @@
             <div class="card card-body card border-primary">
                 <h5 class="card-title">Warranties</h5>
                 <table class="table">
+                    <thead>
                     <tr>
                         <th>Dealership</th>
                         <th>Products Active</th>
                         <th>Expiry Date</th>
                         <th>ID</th>
                     </tr>
+                </thead>
+                <tbody>
                     {% for war in warranties %}
                         <tr>
                             <td>{{war.dealershipID|title}}</td>
@@ -39,6 +42,7 @@
                             <td>{{war.id}}</td>
                         </tr>
                     {% endfor%}
+                </tbody>
                 </table>
             </div>
         </div>

@@ -3,8 +3,8 @@
 
 {% block content %}
 
-<div style='margin-top:30px;'>
-
+<div>
+  <h2>Inspection ID: #{{ object.id }}</h2>
   <form method="post">
     {% csrf_token %}
     <div class="row">
