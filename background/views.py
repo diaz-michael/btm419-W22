@@ -18,7 +18,7 @@ def home(request):
         if request.user.is_staff:
             customers = Customer.objects.all()
             header = "Customer List"
-            table_css_id = "tableDB"
+            table_css_id = "table_db"
         else:
             customers = Customer.objects.filter(email = request.user.email) 
             customer = customers.first().first_name
