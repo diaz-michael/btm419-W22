@@ -1,5 +1,3 @@
-from asyncio.windows_events import NULL
-from itertools import count
 from django.db.models import Count
 from django.db.models import Q
 from django.shortcuts import render
