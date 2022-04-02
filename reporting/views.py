@@ -124,7 +124,7 @@ def insFilterView(request):
                         entry['status'] = option[1]
 
     
-    x = status_options
+    x = [entry['status'] for entry in counts]
     y = [entry['cnt'] for entry in counts]
     fig, ax = plt.subplots()
     vbar = ax.bar(x, y)
