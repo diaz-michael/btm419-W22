@@ -9,3 +9,5 @@ Group Yellow
 6.	Run "py manage.py runserver"
 
 Yes. I am aware that the secret key is visible.
+
+Syncing SQLLite to Heroku: https://stackoverflow.com/questions/58908100/how-to-sync-local-django-sqlite3-data-with-herokus-postgres-database
