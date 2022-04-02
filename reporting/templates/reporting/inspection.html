@@ -6,61 +6,81 @@
         <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="history.back()">Go Back</button>
     </div>
     <div class="col-md-10">
-        <h1 class="text-left">Inspections</h1>
+        <h2 class="text-left">Inspections</h2>
     </div>
 </div>
 <br>
 
-    
+
 <div class="row">
-    <div class="col-md-8 d-flex align-items-stretch">
+    <div class="col-md-6">
         <div class="card card-body card border-primary">
             <h5 class="card-title">Inspections Status</h5>
             <table class="table">
-                <tr>
-                    <th>Status</th>
-                    <th>Amount</th>
-                </tr>
-                {% for status in inspection_status_list %}
-                <tr>
-                    <td>{{status.0}}</td>
-                    <td>{{status.1}}</td>
-                </tr>
-                {% endfor %}
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for status in inspection_status_list %}
+                    <tr>
+                        <td>{{status.0}}</td>
+                        <td>{{status.1}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>
+    <div class="col-md-6">
+        <img src="data:image/png;base64,{{image_base64}}" alt="status table" width=500 height=auto />
+    </div>
+
 </div>
 
 <div class="row">
-    <div class="col-md-8 d-flex align-items-stretch">
+    <div class="col-md-12 d-flex align-items-stretch">
         <div class="card card-body card border-primary">
             <h5 class="card-title">Inspections Table</h5>
-            <table class="table">
-                <tr>
-                    <th>Claim</th>
-                    <th>VIN</th>
-                    <th>Status</th>
-                    <th>Scheduled Date</th>
-                    <th>ClaimID</th>
-                </tr>
-                {% for inspection in inspection_list %}
-                <tr>
-                    <td>{{inspection.claimID}}</td>
-                    <td>{{inspection.vin}}</td>
-                    <td>{{inspection.get_status_display}}</td>
-                    <td>{{inspection.scheduledDate}}</td>
-                    <td>{{inspection.claimID_id}}</td>
-                </tr>
-                {% endfor %}
+            <table id="table_db" class="table">
+                <thead>
+                    <tr>
+                        <th>Claim</th>
+                        <th>VIN</th>
+                        <th>Status</th>
+                        <th>Scheduled Date</th>
+                        <th>ClaimID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inspection in inspection_list %}
+                    <tr>
+                        <td>{{inspection.claimID}}</td>
+                        <td>{{inspection.vin}}</td>
+                        <td>{{inspection.get_status_display}}</td>
+                        <td>{{inspection.scheduledDate}}</td>
+                        <td>{{inspection.claimID_id}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<img src="data:image/png;base64,{{image_base64}}"
- alt="some text to display to your users when the image does not show correctly" width=500 height=auto />
+
 
 {% endblock %}
 
-
+{% block js %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#table_db').DataTable();
+    });
+</script>
+</div>
+{% endblock %}

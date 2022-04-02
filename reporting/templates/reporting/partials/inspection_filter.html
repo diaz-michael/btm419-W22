@@ -1,0 +1,170 @@
+{% extends 'background/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="d-grid col-md-2">
+        <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="history.back()">Go Back</button>
+    </div>
+    <div class="col-md-10">
+        <h2 class="text-left">Inspections</h2>
+    </div>
+</div>
+<br>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-body card border-primary">
+            <h5 class="card-title">Inspections Status</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in counts %}
+                    <tr>
+                        <td>{{x.status}}</td>
+                        <td>{{x.cnt}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <img src="data:image/png;base64,{{chart}}" alt="status table" width=80% height=auto />
+    </div>
+
+</div>
+
+<main role="main" class="container">
+    <h3>Filter</h3>
+    <form method="GET" action="">
+        <div class="row">
+            <div class="form-group col-6">
+                <div class="input-group">
+                    <input class="form-control py-2 border-right-0 border" type="search"
+                        placeholder="Customer Name contains..." name="name_contains" , value="{{filtervalues.name}}" />
+                    <span class="input-group-text">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-6">
+                <div class="input-group">
+                    <input class="form-control py-2 border-right-0 border" type="search" placeholder="Make or Model..."
+                        name="makemodel" , value="{{filtervalues.makemodel}}" />
+                    <span class="input-group-text">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-2 col-lg-2">
+                <label for="yearMin">Minimum Vehicle Year</label>
+                <input type="number" min=0 class="form-control" id="yearMin" placeholder="2010" name="yearMin" ,
+                    value="{{filtervalues.yearMin}}">
+            </div>
+            <div class="form-group col-md-2 col-lg-2">
+                <label for="yearMax">Maximum Vehicle Year</label>
+                <input type="number" min=0 class="form-control" id="yearMax" placeholder="2023" name="yearMax" ,
+                    value="{{filtervalues.yearMax}}">
+            </div>
+            <div class="form-group col-md-2 col-lg-2">
+                <label for="schedDateMin">Scheduled date minimum</label>
+                <input type="date" class="form-control" id="schedDateMin" name="dateMin" ,
+                    value="{{filtervalues.dateMin}}">
+            </div>
+            <div class="form-group col-md-2 col-lg-2">
+                <label for="schedDateMax">Scheduled date maximum</label>
+                <input type="date" class="form-control" id="schedDateMax" name="dateMax" ,
+                    value="{{filtervalues.dateMax}}">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="status">Status</label>
+                <select id="status" class="form-control" name="status" , value="{{filtervalues.status}}">
+                    <option selected>Choose...</option>
+                    {% for status in status_options %}
+                    <option value="{{ status }}">{{ status }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <br>
+    <div class="row">
+        <div class="col-md-12 d-flex align-items-stretch">
+            <div class="card card-body card border-primary">
+                <h5 class="card-title">Inspections Table</h5>
+                <table id="table_db" class="table">
+                    <thead>
+                        <tr>
+                            <th>Claim ID</th>
+                            <th>Customer</th>
+                            <th>VIN</th>
+                            <th>Make</th>
+                            <th>Model</th>
+                            <th>Year</th>
+                            <th>Colour</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>ID</th>
+                            <th>Dealership</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for ins in queryset %}
+                        <tr>
+
+                            <td>{{ins.claimID.id}}</td>
+                            <td>{{ins.claimID.warrantyID.customerID.first_name}}
+                                {{ins.claimID.warrantyID.customerID.last_name}}
+                            </td>
+                            <td>{{ins.vin|make_list|slice:":8"|join:""}}<wbr>{{ins.vin|make_list|slice:"9:"|join:""}}
+                            </td>
+                            <td>{{ins.make}}</td>
+                            <td>{{ins.model}}</td>
+                            <td>{{ins.year}}</td>
+                            <td>{{ins.colour}}</td>
+                            <td>{{ins.get_status_display}}</td>
+                            <td>{{ins.scheduledDate|date:"Y-m-d" }}</td>
+                            <td>{{ins.id}}</td>
+                            <td>{{ins.claimID.warrantyID.dealershipID}}</td>
+                            {% endfor %}
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+{% block js %}
+<script>
+
+    $(document).ready(function () {
+        $('#table_db').DataTable(
+            {
+                "searching": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    'colvis', 'copy', 'excel', 'pdf'
+                ]
+            }
+        );
+    });
+    new $.fn.dataTable.Buttons(table, {
+        buttons: [
+            'colvis', 'copy', 'excel', 'pdf'
+        ]
+    });
+</script>
+</div>
+{% endblock %}
