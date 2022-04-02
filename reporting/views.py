@@ -1,4 +1,5 @@
-from django.db.models import Count, Sum, F, FloatField
+from django.db.models import Count, Sum, F, FloatField, Avg, Max, Min
+
 from django.db.models import Q
 from django.shortcuts import render
 from inventory.models import order_form
@@ -78,11 +79,39 @@ def inventory(request):
     if is_valid_queryparam(values, 'updatedDateMax', updatedDateMax_query):
         qs = qs.filter(updated__lte=updatedDateMax_query)
 
-    print(values)
+    # dealercounts = qs.values('dealershipID__dealership').annotate(cnt=Count('id',  distinct=True)).order_by('dealershipID__dealership')
+    # print(dealercounts)
+
+    # x = [entry['dealershipID__dealership'] for entry in dealercounts]
+    # y = [entry['cnt'] for entry in dealercounts]
+
+    productcounts = qs.values('order__productID__name').annotate(sum=Sum('order__quantity')).order_by('order__productID__name')
+    # print(productcounts)
+    labels = list(filter(None,[entry['order__productID__name'] for entry in productcounts]))
+    sums = list(filter(None,[entry['sum'] for entry in productcounts]))
+    print(sums)
+    fig, ax = plt.subplots()
+    ax.pie(sums, labels=labels, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')
+    # # Optional: chart title and label axes.
+    ax.set_title("Products Sold by Quantity", fontsize=24)
+
+    # Create a bytes buffer for saving image
+    figbuffer = BytesIO()
+    plt.savefig(figbuffer, format='png', dpi=300)
+    image_base640=base64.b64encode(figbuffer.getvalue())
+    product_image = image_base640.decode('utf-8')
+    figbuffer.close() 
+
+    summarytable = qs.aggregate(Avg('totalsum'),Max('totalsum'), Min('totalsum'), Count('order',distinct=True))
+    print(summarytable)
+    # print(values)
     context = {
         'inventory_list': qs,
         'filtervalues': values,
-        'product_list': product_list
+        'product_list': product_list,
+        'product_image': product_image,
+        'summarytable': summarytable
     }
     return render(request, 'reporting/inventory.html', context)
 

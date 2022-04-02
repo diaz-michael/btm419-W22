@@ -1,144 +1,176 @@
 {% extends 'background/base.html' %}
 
 {% block content %}
-
 <div class="row">
     <div class="d-grid col-md-2">
-        <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="history.back()">Go Back</button>
+        <a type="button" class="btn btn-secondary btn-lg btn-block" href="{% url 'reporting:index' %}">Go Back</a>
     </div>
     <div class="col-md-10">
         <h2 class="text-left">Inventory</h2>
     </div>
 </div>
 <br>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-body card border-primary">
+            <h5 class="card-title">Orders Summary Table</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Statistic</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Average Order Total</td>
+                        <td>${{summarytable.totalsum__avg|floatformat:2}}</td>
+                    </tr>
+                    <tr>
+                        <td>Max Order Total</td>
+                        <td>${{summarytable.totalsum__max|floatformat:2}}</td>
+                    </tr>
+                    <tr>
+                        <td>Min Order Total</td>
+                        <td>${{summarytable.totalsum__min|floatformat:2}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total Orders</td>
+                        <td>{{summarytable.order__count}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <img src="data:image/png;base64,{{product_image}}" alt="status table" width=80% height=auto />
+    </div>
 
-<main role="main" class="container">
-    <h3>Filter</h3>
-    <form method="GET" action="">
-        <div class="row">
-            <div class="form-group col-6">
-                <div class="input-group">
-                    <input class="form-control py-2 border-right-0 border" type="search"
-                        placeholder="Dealership Name contains..." name="name_contains" ,
-                        value="{{filtervalues.name}}" />
-                    <span class="input-group-text">
-                        <i class="fa fa-search"></i>
-                    </span>
-                </div>
-            </div>
-            <div class="form-group col-6">
-                <div class="input-group">
-                    <input class="form-control py-2 border-right-0 border" type="search"
-                        placeholder="Salesperson name contains..." name="salesperson" ,
-                        value="{{filtervalues.salesperson}}" />
-                    <span class="input-group-text">
-                        <i class="fa fa-search"></i>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-2 col-lg-2">
-                <label for="totalMin">Minimum $Total</label>
-                <input type="number" min=0 class="form-control" id="totalMin" placeholder="100" name="totalMin" ,
-                    value="{{filtervalues.totalMin}}">
-            </div>
-            <div class="form-group col-md-2 col-lg-2">
-                <label for="totalMax">Maximum $Total</label>
-                <input type="number" min=0 class="form-control" id="totalMax" placeholder="2000" name="totalMax" ,
-                    value="{{filtervalues.totalMax}}">
-            </div>
-            <div class="form-group col-md-2 col-lg-2">
-                <label for="qtyMin">Minimum Qty</label>
-                <input type="number" min=0 class="form-control" id="qtyMin" placeholder="2010" name="qtyMin" ,
-                    value="{{filtervalues.qtyMin}}">
-            </div>
-            <div class="form-group col-md-2 col-lg-2">
-                <label for="qtyMax">Maximum Qty</label>
-                <input type="number" min=0 class="form-control" id="qtyMax" placeholder="2023" name="qtyMax" ,
-                    value="{{filtervalues.qtyMax}}">
-            </div>
-            <div class="form-group col-md-4">
-                <label for="product">Product</label>
-                <select id="product" class="form-control" name="product" , value="{{filtervalues.product}}">
-                    <option selected>Order includes...</option>
-                    {% for product in product_list %}
-                    <option value="{{ product }}">{{ product }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-2 col-lg-3">
-                <label for="placedDateMin">Placed date minimum</label>
-                <input type="date" class="form-control" id="placedDateMin" name="placedDateMin" ,
-                    value="{{filtervalues.placedDateMin}}">
-            </div>
-            <div class="form-group col-md-2 col-lg-3">
-                <label for="placedDateMax">Placed date maximum</label>
-                <input type="date" class="form-control" id="placedDateMax" name="placedDateMax" ,
-                    value="{{filtervalues.placedDateMax}}">
-            </div>
-            <div class="form-group col-md-2 col-lg-3">
-                <label for="updatedDateMin">Update date minimum</label>
-                <input type="date" class="form-control" id="updatedDateMin" name="updatedDateMin" ,
-                    value="{{filtervalues.updatedDateMin}}">
-            </div>
-            <div class="form-group col-md-2 col-lg-3">
-                <label for="updatedDateMax">Update date maximum</label>
-                <input type="date" class="form-control" id="updatedDateMax" name="updatedDateMax" ,
-                    value="{{filtervalues.updatedDateMax}}">
-            </div>
-
-        </div>
-        <br>
-        <button type="submit" class="btn btn-primary">Search</button>
-        <a href="{% url 'reporting:inventory' %}" class="btn btn-warning">Reset Filter</a>
-    </form>
-    <br>
+</div>
+<h3>Filter</h3>
+<form method="GET" action="">
     <div class="row">
-        <div class="col-md-12 d-flex align-items-stretch">
-            <div class="card card-body card border-primary">
-                <h5 class="card-title">Orders Table</h5>
-                <table id="table_db" class="table">
-                    <thead>
-                        <tr>
-                            <th>Order Number</th>
-                            <th>Dealership</th>
-                            <th>Salesperson</th>
-                            <th>Total</th>
-                            <th>Total Quantity</th>
-                            <th>Products</th>
-                            <th>Date Placed</th>
-                            <th>Last Update</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for order in inventory_list %}
-                        <tr>
-                            <td>{{order.id}}</td>
-                            <td>{{order.dealershipID}}</td>
-                            <td>{{order.salespersonID}}</td>
-                            <td>${{order.totalsum|floatformat:2}}</td>
-                            <td>{{order.totalqty}}</td>
-                            <td>{{order.get_order_form_products}}</td>
-                            <td>{{order.date}}</td>
-                            <td>{{order.updated}}</td>
-
-                        </tr>
-                        {% endfor%}
-                    </tbody>
-                </table>
+        <div class="form-group col-6">
+            <div class="input-group">
+                <input class="form-control py-2 border-right-0 border" type="search"
+                    placeholder="Dealership Name contains..." name="name_contains" , value="{{filtervalues.name}}" />
+                <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                </span>
+            </div>
+        </div>
+        <div class="form-group col-6">
+            <div class="input-group">
+                <input class="form-control py-2 border-right-0 border" type="search"
+                    placeholder="Salesperson name contains..." name="salesperson" ,
+                    value="{{filtervalues.salesperson}}" />
+                <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                </span>
             </div>
         </div>
     </div>
-</main>
+    <div class="row">
+        <div class="form-group col-md-2 col-lg-2">
+            <label for="totalMin">Minimum $Total</label>
+            <input type="number" min=0 class="form-control" id="totalMin" placeholder="100" name="totalMin" ,
+                value="{{filtervalues.totalMin}}">
+        </div>
+        <div class="form-group col-md-2 col-lg-2">
+            <label for="totalMax">Maximum $Total</label>
+            <input type="number" min=0 class="form-control" id="totalMax" placeholder="2000" name="totalMax" ,
+                value="{{filtervalues.totalMax}}">
+        </div>
+        <div class="form-group col-md-2 col-lg-2">
+            <label for="qtyMin">Minimum Qty</label>
+            <input type="number" min=0 class="form-control" id="qtyMin" placeholder="2010" name="qtyMin" ,
+                value="{{filtervalues.qtyMin}}">
+        </div>
+        <div class="form-group col-md-2 col-lg-2">
+            <label for="qtyMax">Maximum Qty</label>
+            <input type="number" min=0 class="form-control" id="qtyMax" placeholder="2023" name="qtyMax" ,
+                value="{{filtervalues.qtyMax}}">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="product">Product</label>
+            <select id="product" class="form-control" name="product" , value="{{filtervalues.product}}">
+                <option selected>Order includes...</option>
+                {% for product in product_list %}
+                <option value="{{ product }}">{{ product }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-2 col-lg-3">
+            <label for="placedDateMin">Placed date minimum</label>
+            <input type="date" class="form-control" id="placedDateMin" name="placedDateMin" ,
+                value="{{filtervalues.placedDateMin}}">
+        </div>
+        <div class="form-group col-md-2 col-lg-3">
+            <label for="placedDateMax">Placed date maximum</label>
+            <input type="date" class="form-control" id="placedDateMax" name="placedDateMax" ,
+                value="{{filtervalues.placedDateMax}}">
+        </div>
+        <div class="form-group col-md-2 col-lg-3">
+            <label for="updatedDateMin">Update date minimum</label>
+            <input type="date" class="form-control" id="updatedDateMin" name="updatedDateMin" ,
+                value="{{filtervalues.updatedDateMin}}">
+        </div>
+        <div class="form-group col-md-2 col-lg-3">
+            <label for="updatedDateMax">Update date maximum</label>
+            <input type="date" class="form-control" id="updatedDateMax" name="updatedDateMax" ,
+                value="{{filtervalues.updatedDateMax}}">
+        </div>
+
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary">Search</button>
+    <a href="{% url 'reporting:inventory' %}" class="btn btn-warning">Reset Filter</a>
+</form>
+<br>
+<div class="row">
+    <div class="col-md-12 d-flex align-items-stretch">
+        <div class="card card-body card border-primary">
+            <h5 class="card-title">Orders Table</h5>
+            <table id="table_db" class="table">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Dealership</th>
+                        <th>Salesperson</th>
+                        <th>Total</th>
+                        <th>Total Quantity</th>
+                        <th>Products</th>
+                        <th>Date Placed</th>
+                        <th>Last Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in inventory_list %}
+                    <tr>
+                        <td>{{order.id}}</td>
+                        <td>{{order.dealershipID}}</td>
+                        <td>{{order.salespersonID}}</td>
+                        <td>${{order.totalsum|floatformat:2}}</td>
+                        <td>{{order.totalqty}}</td>
+                        <td>{{order.get_order_form_products}}</td>
+                        <td>{{order.date}}</td>
+                        <td>{{order.updated}}</td>
+
+                    </tr>
+                    {% endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block js %}
 <script>
 
-$(document).ready(function () {
+    $(document).ready(function () {
         $('#table_db').DataTable(
             {
                 "searching": false,
