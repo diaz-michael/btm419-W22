@@ -27,6 +27,7 @@ def index(request):
 def inventory(request):
     """The reporting page"""
     qs = order_form.objects.all().prefetch_related('order_set').prefetch_related('order_set__productID').select_related('dealershipID').select_related('salespersonID').order_by('-id')
+    productcounts = qs.values('order__productID__name').annotate(sum=Sum('order__quantity')).order_by('order__productID__name')
     qs = qs.annotate(totalqty=Sum('order__quantity'))
     qs = qs.annotate(totalsum=Sum((1 - F('order__discount')) * F('order__quantity') * F('order__price'), output_field=FloatField()))
     product_list = Product.objects.all().values_list('name', flat=True)
@@ -85,7 +86,6 @@ def inventory(request):
     # x = [entry['dealershipID__dealership'] for entry in dealercounts]
     # y = [entry['cnt'] for entry in dealercounts]
 
-    productcounts = qs.values('order__productID__name').annotate(sum=Sum('order__quantity')).order_by('order__productID__name')
     # print(productcounts)
     labels = list(filter(None,[entry['order__productID__name'] for entry in productcounts]))
     sums = list(filter(None,[entry['sum'] for entry in productcounts]))
@@ -98,7 +98,7 @@ def inventory(request):
 
     # Create a bytes buffer for saving image
     figbuffer = BytesIO()
-    plt.savefig(figbuffer, format='png', dpi=300)
+    plt.savefig(figbuffer, format='png', dpi=300, bbox_inches='tight')
     image_base640=base64.b64encode(figbuffer.getvalue())
     product_image = image_base640.decode('utf-8')
     figbuffer.close() 
@@ -178,7 +178,7 @@ def insFilterView(request):
 
     # Create a bytes buffer for saving image
     figbuffer = BytesIO()
-    plt.savefig(figbuffer, format='png', dpi=300)
+    plt.savefig(figbuffer, format='png', dpi=300, bbox_inches='tight')
     image_base640=base64.b64encode(figbuffer.getvalue())
     image_base64 = image_base640.decode('utf-8')
     figbuffer.close() 
