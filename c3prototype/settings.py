@@ -32,8 +32,6 @@ ALLOWED_HOSTS = ["btm419-2022yellow.herokuapp.com",'127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    'dal',
-    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,7 +46,8 @@ INSTALLED_APPS = [
     'inspections',
     'inventory',
     'crispy_forms',
-    'reporting'
+    'reporting',
+    'datavis'
 ]
 
 MIDDLEWARE = [

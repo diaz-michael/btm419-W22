@@ -55,7 +55,3 @@ def inspection_create_view(request):
         return redirect(ins.get_absolute_url())
     return render(request, "inspections/create-update.html", context)
     
-
-
-
-

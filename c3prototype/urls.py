@@ -27,7 +27,7 @@ urlpatterns = [
     path('', include("django.contrib.auth.urls")),
     path('reporting/', include('reporting.urls', namespace='reporting')),
     path('inventory/orders/', include('inventory.urls')),
-    path('inspections/', include('inspections.urls')),
+    path('inspections/', include('inspections.urls')),    
     path('__debug__/', include('debug_toolbar.urls')),
 ]
 urlpatterns += staticfiles_urlpatterns()

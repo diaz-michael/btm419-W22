@@ -1,37 +1,37 @@
 <!-- forms.html 
     https://github.com/codingforentrepreneurs/Try-Django-3.2 -->
-<form action='.' method="POST" hx-post='.' hx-swap='outerHTML'>
-    {% csrf_token %}
-    <h3>Order Info</h3>
-   {% for field in form %}
-   <div class='{% if field.field.required %}{{ form.required_css_class }}{%endif%}'>
-    {{ field.errors }}   
-    {{ field.label_tag }} {{ field }}
-    {% if field.help_text %}
-        <p class="help">{{ field.help_text|safe }}</p>
-    {% endif %}
-    </div>
-   {% endfor %}
-
-
-    {% if formset %}
-    <br>
-    <h3>Order Lines</h3>
-    {{ formset.management_form }}
-    <div id='order-form-list'>
-        {% for form in formset %}
-                <div class='order-form'>
-                    {{ form }}
-                </div>
-        {% endfor %}
-    </div>
-
-    <div id='empty-form' class='hidden'>{{ formset.empty_form}}</div>
-    <button id='add-more' type='button'>Add Order Line</button>
-    {% endif %}
-    <button style='margin-top:10px;' type='submit' >Save</button>
+    <form action='.' method="POST" hx-post='.' hx-swap='outerHTML'>
+        {% csrf_token %}
+        <h3>Order Info</h3>
+       {% for field in form %}
+       <div class='{% if field.field.required %}{{ form.required_css_class }}{%endif%}'>
+        {{ field.errors }}   
+        {{ field.label_tag }} {{ field }}
+        {% if field.help_text %}
+            <p class="help">{{ field.help_text|safe }}</p>
+        {% endif %}
+        </div>
+       {% endfor %}
     
-    {% if message %}
-    <h3>{{ message }}</h3>
-    {% endif %}
-</form>
+    
+        {% if formset %}
+        <br>
+        <h3>Order Lines</h3>
+        {{ formset.management_form }}
+        <div id='order-form-list'>
+            {% for form in formset %}
+                    <div class='order-form'>
+                        {{ form }}
+                    </div>
+            {% endfor %}
+        </div>
+    
+        <div id='empty-form' class='hidden'>{{ formset.empty_form}}</div>
+        <button id='add-more' type='button'>Add Order Line</button>
+        {% endif %}
+        <button style='margin-top:10px;' type='submit' >Save</button>
+        
+        {% if message %}
+        <h3>{{ message }}</h3>
+        {% endif %}
+    </form>

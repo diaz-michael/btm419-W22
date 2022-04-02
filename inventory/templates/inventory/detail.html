@@ -1,56 +1,56 @@
 <!-- detail.html
     https://github.com/codingforentrepreneurs/Try-Django-3.2 -->
-{% extends "background/base.html" %}
+    {% extends "background/base.html" %}
 
-{% load mathfilters %}
-{% block content %}
-
-<h2>{{ object.dealershipID }}</h2>
-<h3>Salesperson: {{ object.salespersonID }} | ${{ object.get_order_form_total|floatformat:2 }}</h3>
-<div class="card mb-4">
-    <a type="button" class="btn btn-primary btn-lg btn-block" href='{{ object.get_edit_url }}'>Edit Order</a>
-</div>
-<div class="row">
-    <div class="col-md">
-        <div class="card card-body">
-            <table id="table_db" class="table">
-                <thead>
-                    <tr>
-                        <th>Product (current unit price)</th>
-                        <th>Discount (0.50 = 50%)</th>
-                        <th>Quantity</th>
-                        <th>Order Unit Price</th>
-                        <th>Order Line Total Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in object.get_order_form_children %}
-                    <tr>
-                        <td>{{order.productID}}</td>
-                        <td>{{order.discount}}</td>
-                        <td>{{order.quantity}}</td>
-                        <td>{{order.price}}</td>
-                        <td>${{1|sub:order.discount|mul:order.price|mul:order.quantity|floatformat:2}}</td>
-
-                    </tr>
-                    {% endfor%}
-                </tbody>
-            </table>
+    {% load mathfilters %}
+    {% block content %}
+    
+    <h2>{{ object.dealershipID }}</h2>
+    <h3>Salesperson: {{ object.salespersonID }} | ${{ object.get_order_form_total|floatformat:2 }}</h3>
+    <div class="card mb-4">
+        <a type="button" class="btn btn-primary btn-lg btn-block" href='{{ object.get_edit_url }}'>Edit Order</a>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <div class="card card-body">
+                <table id="table_db" class="table">
+                    <thead>
+                        <tr>
+                            <th>Product (current unit price)</th>
+                            <th>Discount (0.50 = 50%)</th>
+                            <th>Quantity</th>
+                            <th>Order Unit Price</th>
+                            <th>Order Line Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in object.get_order_form_children %}
+                        <tr>
+                            <td>{{order.productID}}</td>
+                            <td>{{order.discount}}</td>
+                            <td>{{order.quantity}}</td>
+                            <td>{{order.price}}</td>
+                            <td>${{1|sub:order.discount|mul:order.price|mul:order.quantity|floatformat:2}}</td>
+    
+                        </tr>
+                        {% endfor%}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-
-{% endblock %}
-{% block js %}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-<script>
-$(document).ready(function() {
-    $('#table_db').DataTable( {
-        "paging":   false,
-        "searching":     false
+    
+    {% endblock %}
+    {% block js %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#table_db').DataTable( {
+            "paging":   false,
+            "searching":     false
+        } );
     } );
-} );
-</script>
-</div>
-{% endblock %}
+    </script>
+    </div>
+    {% endblock %}
