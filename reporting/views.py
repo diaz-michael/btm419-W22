@@ -1,8 +1,9 @@
-from django.db.models import Count
+from django.db.models import Count, Sum, F, FloatField
 from django.db.models import Q
 from django.shortcuts import render
-from inventory.models import order
+from inventory.models import order_form
 from inspections.models import inspection
+from background.models import Product
 from io import BytesIO
 import matplotlib.pyplot as plt
 import base64
@@ -24,53 +25,66 @@ def index(request):
 
 def inventory(request):
     """The reporting page"""
-    inventory_list = order.objects.all()
-    print(inventory_list)
-    return render(request, 'reporting/inventory.html',
-    context = {'inventory_list': list(inventory_list), "title": "Inventory"})
+    qs = order_form.objects.all().prefetch_related('order_set').prefetch_related('order_set__productID').select_related('dealershipID').select_related('salespersonID').order_by('-id')
+    qs = qs.annotate(totalqty=Sum('order__quantity'))
+    qs = qs.annotate(totalsum=Sum((1 - F('order__discount')) * F('order__quantity') * F('order__price'), output_field=FloatField()))
+    product_list = Product.objects.all().values_list('name', flat=True)
+    name_contains_query = request.GET.get('name_contains')
+    salesperson_contains_query = request.GET.get('salesperson')
+    totalMin_query = request.GET.get('totalMin')
+    totalMax_query = request.GET.get('totalMax')
+    qtyMin_query = request.GET.get('qtyMin')
+    qtyMax_query = request.GET.get('qtyMax')
+    product_query = request.GET.get('product')
+    placedDateMin_query = request.GET.get('placedDateMin')
+    placedDateMax_query = request.GET.get('placedDateMax')
+    updatedDateMin_query = request.GET.get('updatedDateMin')
+    updatedDateMax_query = request.GET.get('updatedDateMax')
+    
+    values = {}
 
+    if is_valid_queryparam(values, 'name', name_contains_query):
+        qs = qs.filter(dealershipID__dealership__icontains=name_contains_query)
+    
+    if is_valid_queryparam(values, 'salesperson', salesperson_contains_query):
+        qs = qs.filter(Q(salespersonID__first_name__icontains=salesperson_contains_query)
+                    | Q(salespersonID__last_name__icontains=salesperson_contains_query)
+                    ).distinct()
+                    
+    if is_valid_queryparam(values, 'totalMin', totalMin_query):
+        qs = qs.filter(totalsum__gte=totalMin_query)
 
+    if is_valid_queryparam(values, 'totalMax', totalMax_query):
+        qs = qs.filter(totalsum__lte=totalMax_query)
 
-def inspection_status_view(request):
-    "The Inspection page"    
-    inspection_sc_list = inspection.objects.filter(status = 'Sc')
-    sc_list = ["Scheduled",len(inspection_sc_list)]
-    inspection_cm_list = inspection.objects.filter(status = 'Cm')
-    cm_list = ["Cancelled",len(inspection_cm_list)]
-    inspection_ex_list = inspection.objects.filter(status = 'Ex')
-    ex_list = ["Expired",len(inspection_ex_list)]
-    inspection_status_list = [sc_list,cm_list,ex_list]
-    inspection_list = inspection.objects.all().select_related('claimID').select_related('claimID__warrantyID').select_related('claimID__warrantyID__customerID').select_related('claimID__warrantyID__dealershipID').order_by("-scheduledDate")
-    print(inspection_status_list) 
+    if is_valid_queryparam(values, 'qtyMin', qtyMin_query):
+        qs = qs.filter(totalqty__gte=qtyMin_query)
 
-    x = ["Scheduled", "Cancelled", "Expired"]
-    y = [len(inspection_sc_list), len(inspection_cm_list), len(inspection_ex_list)]
-    fig, ax = plt.subplots()
-    vbar = ax.bar(x, y)
-    # Optional: chart title and label axes.
-    ax.set_title("Inspection Status", fontsize=24)
-    ax.set_xlabel("Status", fontsize=14)
-    ax.set_ylabel("Number of Inspection", fontsize=14)
-    ax.bar_label(vbar,fmt="%.2f")
+    if is_valid_queryparam(values, 'qtyMax', qtyMax_query):
+        qs = qs.filter(totalqty__lte=qtyMax_query)
 
+    if is_valid_queryparam(values, 'product', product_query) and product_query != "Order includes...":
+        qs = qs.filter(order__productID__name__icontains=product_query)
 
+    if is_valid_queryparam(values, 'placedDateMin', placedDateMin_query):
+        qs = qs.filter(date__gte=placedDateMin_query)
 
-    # Create a bytes buffer for saving image
-    figbuffer = BytesIO()
-    plt.savefig(figbuffer, format='png', dpi=300)
-    image_base640=base64.b64encode(figbuffer.getvalue())
-    image_base64 = image_base640.decode('utf-8')
-    figbuffer.close()    
+    if is_valid_queryparam(values, 'placedDateMax', placedDateMax_query):
+        qs = qs.filter(date__lte=placedDateMax_query)
 
+    if is_valid_queryparam(values, 'updatedDateMin', updatedDateMin_query):
+        qs = qs.filter(updated__gte=updatedDateMin_query)
 
+    if is_valid_queryparam(values, 'updatedDateMax', updatedDateMax_query):
+        qs = qs.filter(updated__lte=updatedDateMax_query)
 
-    return render(request, 'reporting/inspection.html',
-    context={'inspection_status_list': inspection_status_list,'inspection_list': inspection_list,'image_base64':image_base64})
-
-def inspection_whole_view(request):
-    inspection_list = inspection.objects.all()
-    return render(request, 'reporting/inspection.html',
-    context={'inspection': inspection_list, "title": "inspection"})
+    print(values)
+    context = {
+        'inventory_list': qs,
+        'filtervalues': values,
+        'product_list': product_list
+    }
+    return render(request, 'reporting/inventory.html', context)
 
 def insFilterView(request):
 
@@ -103,7 +117,6 @@ def insFilterView(request):
         
     if is_valid_queryparam(values, 'yearMin', yearMin_query):
         qs = qs.filter(year__gte=yearMin_query)
-        values['yearMin'] = yearMin_query
         
     if is_valid_queryparam(values, 'yearMax', yearMax_query):
         qs = qs.filter(year__lte=yearMax_query)
@@ -150,7 +163,7 @@ def insFilterView(request):
         'chart': image_base64,
         'filtervalues': values,
     }
-    return render(request, "reporting/partials/inspection_filter.html", context)
+    return render(request, "reporting/inspection_filter.html", context)
     
 
 

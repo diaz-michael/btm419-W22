@@ -2,10 +2,13 @@ from django.db import models
 from django.urls import reverse
 
 # Create your models here.
+
 class order_form(models.Model):
     dealershipID = models.ForeignKey('background.Dealership', on_delete=models.PROTECT)
     salespersonID = models.ForeignKey('background.employee', on_delete=models.PROTECT)
     date = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    
     def __str__(self):
         return "#"+ str(self.id) + " | " + str(self.dealershipID).title() + " via: " + str(self.salespersonID)
 
@@ -24,6 +27,20 @@ class order_form(models.Model):
         for child in children:
             total = total + ((1 - child.discount) * child.price * child.quantity)
         return total
+
+    def get_order_form_total_qty(self):
+        children = self.get_order_form_children()
+        total_qty = 0
+        for child in children:
+            total_qty = total_qty + child.quantity
+        return total_qty
+
+    def get_order_form_products(self):
+        children = self.get_order_form_children()
+        product_list = []
+        for child in children:
+            product_list.append(child.productID.name)
+        return ', '.join(product_list)
 
 class order(models.Model):
     order_formID = models.ForeignKey(order_form, on_delete=models.PROTECT)
