@@ -10,35 +10,6 @@
     </div>
 </div>
 <br>
-
-
-<div class="row">
-    <div class="col-md-4">
-        <div class="card card-body card border-primary">
-            <h5 class="card-title">Inspections Status</h5>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Status</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for x in counts %}
-                    <tr>
-                        <td>{{x.status}}</td>
-                        <td>{{x.cnt}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="col-md-8">
-        <img src="data:image/png;base64,{{chart}}" alt="status table" width=80% height=auto />
-    </div>
-
-</div>
 <h3>Filter</h3>
 <form method="GET" action="">
     <div class="row">
@@ -95,6 +66,33 @@
     <a href="{% url 'reporting:inspection' %}" class="btn btn-warning">Reset Filter</a>
 </form>
 <br>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-body card border-primary">
+            <h5 class="card-title">Inspections Status</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in counts %}
+                    <tr>
+                        <td>{{x.status}}</td>
+                        <td>{{x.cnt}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <img src="data:image/png;base64,{{chart}}" alt="status table" width=80% height=auto />
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12 d-flex align-items-stretch">
         <div class="card card-body card border-primary">
