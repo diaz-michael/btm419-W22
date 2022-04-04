@@ -3,8 +3,19 @@
 
 {% block content %}
 
+<div class="row">
+  <div class="d-grid col-md-2">
+      {% if object == None %}
+      <a type="button" class="btn btn-secondary btn-lg btn-block" href='{% url "inspections:all" %}'>Go Back</a>
+      {% else %}
+      <a type="button" class="btn btn-secondary btn-lg btn-block" href='{{ object.get_absolute_url }}'>Go Back</a>
+      {% endif %}
+  </div>
+  <div class="col-md-10">
+      <h2>Inspection ID: #{{ object.id }}</h2>
+  </div>
+</div>
 <div>
-  <h2>Inspection ID: #{{ object.id }}</h2>
   <form method="post">
     {% csrf_token %}
 
