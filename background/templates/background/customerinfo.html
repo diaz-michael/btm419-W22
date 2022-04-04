@@ -90,7 +90,7 @@
                     {% for ins in inspections %}
                         <tr>
                             <td>{{ins.claimID.id}}</td>
-                            <td>{{ins.vin|make_list|slice:":8"|join:""}}<wbr>{{ins.vin|make_list|slice:"9:"|join:""}}</td>
+                            <td>{{ins.vin|make_list|slice:":8"|join:""}}<wbr>{{ins.vin|make_list|slice:"8:"|join:""}}</td>
                             <td>{{ins.make}}</td>
                             <td>{{ins.model}}</td>
                             <td>{{ins.year}}</td>
