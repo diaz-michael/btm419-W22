@@ -14,15 +14,16 @@ def index(request):
 
 @login_required
 def inspections_all(request):
-
-    inspections = inspection.objects.all().select_related('claimID').select_related('claimID__warrantyID').select_related('claimID__warrantyID__customerID').select_related('claimID__warrantyID__dealershipID').order_by("-scheduledDate")
-
+    if request.user.is_staff:
+        inspections = inspection.objects.all().select_related('claimID').select_related('claimID__warrantyID').select_related('claimID__warrantyID__customerID').select_related('claimID__warrantyID__dealershipID').order_by("-scheduledDate")
+    else:
+        inspections = inspection.objects.all().select_related('claimID').select_related('claimID__warrantyID').select_related('claimID__warrantyID__customerID').select_related('claimID__warrantyID__dealershipID').filter(claimID__warrantyID__customerID__email = request.user.email).order_by("-scheduledDate")
     context = {'inspections':inspections}
     return render(request, 'inspections/inspections_table.html', context)
 
 @login_required
 def inspection_detail_view(request, id=None):
-    obj = get_object_or_404(inspection, id=id) 
+    obj = get_object_or_404(inspection.objects.select_related('claimID').select_related('claimID__warrantyID').select_related('claimID__warrantyID__customerID'), id=id) 
     context = {
         "inspection": obj
     }
@@ -31,7 +32,8 @@ def inspection_detail_view(request, id=None):
 @login_required
 def inspection_update_view(request, id=None):
     obj = get_object_or_404(inspection.objects.select_related('claimID').select_related('claimID__warrantyID').select_related('claimID__warrantyID__customerID'), id=id)
-    form = inspectionForm(request.POST or None, instance=obj)
+
+    form = inspectionForm(request.POST or None, user=request.user, edit = id != None, instance=obj)
     context = {
         "form": form,
         "object": obj
@@ -41,11 +43,13 @@ def inspection_update_view(request, id=None):
         ins = form.save(commit=False)
         messages.success(request, "Inspection updated successfully!")
         ins.save()
-        # formset.save()
+        print("form saved")
+    else:
+        print("did not save")
     return render(request, "inspections/create-update.html", context) 
 
 def inspection_create_view(request):
-    form = inspectionForm(request.POST or None)
+    form = inspectionForm(request.POST or None, user=request.user)
     context = {
         "form": form
     }

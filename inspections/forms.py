@@ -1,7 +1,6 @@
-from django.forms import ModelForm, widgets 
+from django.forms import ModelForm, widgets
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Field
-from .models import inspection
+from .models import inspection, claim, warranty
 
 class inspectionForm(ModelForm):
     error_css_class = 'error-field'
@@ -16,25 +15,23 @@ class inspectionForm(ModelForm):
         }
     
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        #using kwargs
+        user = kwargs.pop('user', None)
+        edit = kwargs.pop('edit', None)
+        super(inspectionForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Fieldset(
-                'claimID',
-                'vin',
-                'make',
-                'model',
-                'year',
-                'colour',
-                'status',
-                'scheduledDate',
-                'scheduledTime'
-            ),
-            Field('claimID', css_class='form-select'),
-            ButtonHolder(
-                Submit('submit', 'Submit', css_class='button white')
-            )
-        )
+        
+        if user.is_staff == False:
+            self.fields['claimID'].queryset = claim.objects.filter(warrantyID__customerID__email = user.email)
+            print("not a staff")
+
+            if edit:
+                self.fields['vin'].widget.attrs['readonly'] = True
+                self.fields['colour'].widget.attrs['readonly'] = True
+                self.fields['year'].widget.attrs['readonly'] = True
+                self.fields['make'].widget.attrs['readonly'] = True
+                self.fields['model'].widget.attrs['readonly'] = True        
+
         self.fields['vin'].label = 'VIN'
         self.fields['claimID'].label = 'Claim'
         self.fields['scheduledDate'].label = 'Scheduled Date'

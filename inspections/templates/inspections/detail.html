@@ -3,14 +3,34 @@
 {% load mathfilters %}
 {% block content %}
 
-<h2>Inspection ID: #{{ inspection.id }}</h2>
-<h3>Vehicle is a {{ inspection.year }} {{ inspection.colour }} {{ inspection.make }} {{ inspection.model }}</h3>
-<p>VIN: {{ inspection.vin}}</p>
-<p>Scheduled Date: {{ inspection.scheduledDate}} @ {{ inspection.scheduledTime }}</p>
-<p>Status: {{ inspection.get_status_display}}</p>
-<div class="card mb-4">
-    <a  type="button" class="btn btn-primary btn-lg btn-block" href='{{ inspection.get_edit_url }}'>Edit Inspection</a>
+<div class="row">
+    <div class="d-grid col-md-2">
+        <a type="button" class="btn btn-secondary btn-lg btn-block" href='{% url "inspections:all" %}''>Go Back</a>
+    </div>
+    <div class="col-md-10">
+        <h2>Inspection ID: #{{ inspection.id }}</h2>
+    </div>
 </div>
+
+<h3>Vehicle is a {{ inspection.year }} {{ inspection.colour }} {{ inspection.make }} {{ inspection.model }}</h3>
+<p>VIN: {{ inspection.vin}} <br>
+Scheduled Date: {{ inspection.scheduledDate}} @ {{ inspection.scheduledTime }} <br>
+Status: {{ inspection.get_status_display}} <br>
+Claim: {{ inspection.claimID }}</p>
+
+
+<div class="card mb-4">
+    
+    {% if inspection.status != "Cm" %}
+        <a  type="button" class="btn btn-primary btn-lg btn-block" href='{{ inspection.get_edit_url }}'>Reschedule Inspection</a>        
+    {% elif request.user.is_staff %}
+        <a  type="button" class="btn btn-primary btn-lg btn-block" href='{{ inspection.get_edit_url }}'>Edit Inspection</a>
+    {% else %}
+        <a  type="button" class="btn btn-warning btn-lg btn-block disabled">[Can't edit completed or expired inspections]</a>
+    {% endif %}
+    
+</div>
+
 <div class="row">
     <div class="col-md">
         <div class="card card-body">
@@ -18,7 +38,7 @@
             <table class="table">
                 <tr>
                     <th>Technician Name</th>
-                    <th>Note</th>
+                        <th>Note</th>
                     <th>Date</th>
                     <th>Time</th>
                 </tr>
@@ -27,15 +47,16 @@
                         <td>B Flanagan</td>
                         <td><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam elementum vestibulum aliquam. Aenean nec justo bibendum magna imperdiet pretium id nec ipsum. Morbi maximus volutpat dolor, quis lacinia nisi lacinia quis. Nunc vitae vehicula neque, at ornare nisl. Integer fermentum blandit eleifend. Donec ante nisi, congue a semper at, porttitor id diam. Quisque pulvinar orci sed justo varius pulvinar.</p>
                             <p>rutrum lacus nibh, quis faucibus justo luctus vitae. Morbi quis ex lorem. Ut dictum, nisl ut ultricies ornare, urna turpis blandit urna, a sollicitudin tortor ex vel ex. Vivamus pretium orci sed erat semper, finibus condimentum leo placerat. Sed luctus risus quis risus consectetur, id venenatis nisi rutrum.</p></td>
-                        <td>April 1, 2022</td>
-                        <td>4:00pm</td>
+                        <td>{{ inspection.scheduledDate }}</td>
+                        <td>{{ inspection.scheduledTime }}</td>
                     </tr>
             </table>
         </div>
     </div>
 </div>
+{% if request.user.is_staff %}
 <div class="card mb-4">
     <a  type="button" class="btn btn-secondary btn-lg btn-block" href='#'>Edit Notes</a>
 </div>
-
+{% endif %}
 {% endblock content %}
