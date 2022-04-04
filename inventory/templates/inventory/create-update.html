@@ -25,9 +25,10 @@
         </div>
       </div>
 </div>
+<!-- {% endblock %}
 
+{% block js %} -->
 <script>
-    
     const addMoreBtn = document.getElementById('add-more')
     const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
     
@@ -48,11 +49,5 @@
         // now add new empty form element to our html form
         formCopyTarget.append(copyEmptyFormEl)
     }
-    
-
-
 </script>
-
-
-
-{% endblock content %}
+{% endblock %}

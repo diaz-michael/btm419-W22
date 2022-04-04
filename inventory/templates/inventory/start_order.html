@@ -1,0 +1,18 @@
+{% block content %}
+
+
+<div class="row">
+    <h2>Order Notices</h2>
+
+    <ul>
+        <li>Please Note that there are supply chain issues with wacky inflatable tube persons. All orders of this
+            product will be delayed!</li>
+        <li>
+            Sales manager approval is required for discounts over 75%.
+        </li>
+    </ul>
+</div>
+<div class="card mb-4">
+    <a type="button" class="btn btn-primary btn-lg btn-block" href='{{ obj.get_edit_url }}'>Start Order</a>
+</div>
+{% endblock %}

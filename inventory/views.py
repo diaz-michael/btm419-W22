@@ -38,7 +38,7 @@ def order_form_create_view(request):
         obj = form.save(commit=False)
         #obj.user = request.user
         obj.save()
-        return redirect(obj.get_absolute_url())
+        return redirect(obj.get_absolute_start_url())
     return render(request, "inventory/create-update.html", context)  
 
 @login_required
@@ -67,3 +67,11 @@ def order_form_update_view(request, id=None):
     if request.htmx:
         return render(request, "inventory/partials/forms.html", context)
     return render(request, "inventory/create-update.html", context) 
+
+@login_required
+def order_form_start_view(request, id=None):
+    obj = get_object_or_404(order_form, id=id)
+    context = {
+        "obj": obj
+    }
+    return render(request, "inventory/start_order.html", context)
