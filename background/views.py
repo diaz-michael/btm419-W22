@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserChangeForm
 from .forms import RegisterForm
-from django.http import HttpResponse
-from django.core.paginator import Paginator
+from django.db.models import Count
+
+from django.db.models.functions import Coalesce
 
 from .models import *
 from inspections.models import claim, inspection
@@ -16,7 +16,7 @@ def home(request):
                     context = {"products":Product.objects.all})
     else:
         if request.user.is_staff:
-            customers = Customer.objects.all()
+            customers = Customer.objects.all().annotate(inspection_count=Coalesce(Count('warranty__claim__inspection'),0))
             header = "Customer List"
             table_css_id = "table_db"
         else:
