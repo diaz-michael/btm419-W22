@@ -4,9 +4,17 @@
 
     {% load mathfilters %}
     {% block content %}
-    
-    <h2>Order #{{object.id}} for {{ object.dealershipID }}</h2>
-    <h3>Salesperson: {{ object.salespersonID }} | Total: ${{ object.get_order_form_total|floatformat:2 }}</h3>
+    <div class="row">
+        <div class="d-grid col-md-2">
+            <a type="button" class="btn btn-secondary btn-lg btn-block" href='{% url "inventory:list" %}''>Go Back</a>
+        </div>
+        <div class="col-md-10">
+            <h2>Order #{{object.id}}</h2>
+        </div>
+    </div>
+    <h3>For {{ object.dealershipID }} <br>
+        Salesperson: {{ object.salespersonID }} <br>
+        Total: ${{ object.get_order_form_total|floatformat:2 }}</h3>
     <h4>Placed at {{object.date}} | Last Updated at {{object.updated}}</h4>
     <div class="card mb-4">
         <a type="button" class="btn btn-primary btn-lg btn-block" href='{{ object.get_edit_url }}'>Edit Order</a>

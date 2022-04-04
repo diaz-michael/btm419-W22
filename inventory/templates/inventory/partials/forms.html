@@ -27,11 +27,16 @@
         </div>
     
         <div id='empty-form' class='hidden'>{{ formset.empty_form}}</div>
-        <button id='add-more' type='button'>Add Order Line</button>
+        <br>
+        {% if saved %}
+        <a type="button" class="btn btn-secondary" href='{{ object.get_absolute_url }}'>Go Back</a>
+        {% else %}
+        <button id='add-more' class="btn btn-secondary" type='button'>Add Order Line</button>
         {% endif %}
-        <button style='margin-top:10px;' type='submit' >Save</button>
+        {% endif %}
         
-        {% if message %}
-        <h3>{{ message }}</h3>
-        {% endif %}
+        
+        
+        <br>
+        <button style='margin-top:10px;' class="btn btn-primary" type='submit' >Save</button>
     </form>

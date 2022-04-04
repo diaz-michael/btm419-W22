@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.forms.models import modelformset_factory # model form for querysets
 from django.shortcuts import redirect, render, get_object_or_404
-from django.core.paginator import Paginator
+from django.contrib import messages
 
 from .forms import order_formForm, orderForm
 from .models import order_form, order
@@ -63,7 +63,8 @@ def order_form_update_view(request, id=None):
             child.order_formID = parent
             child.price = child.productID.price
             child.save()
-        context['message'] = 'Order saved.'
+        context['saved'] = True
+        messages.success(request, "Order saved successfully!")
     if request.htmx:
         return render(request, "inventory/partials/forms.html", context)
     return render(request, "inventory/create-update.html", context) 
