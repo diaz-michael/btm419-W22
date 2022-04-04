@@ -14,8 +14,6 @@ class Customer(models.Model):
         return self.first_name + " " + self.last_name
 
 class Dealership(models.Model):
-    dealer1 = models.CharField(max_length=200, editable=False)
-    dealer2 = models.CharField(max_length=200, editable=False)
     dealership = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     city = models.CharField(max_length=200)

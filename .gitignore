@@ -1,6 +1,8 @@
 # Text backup files
 *.bak
 
+#datagrips
+.idea
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,django
@@ -13,6 +15,7 @@
 __pycache__/
 local_settings.py
 db.sqlite3
+old.sqlite3
 db.sqlite3-journal
 media
 

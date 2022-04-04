@@ -1,7 +1,7 @@
-from django.db.models import Count, Sum, F, FloatField, Avg, Max, Min, CharField
+from django.db.models import Count, Sum, F, FloatField, Avg, Max, Min
 
 from django.db.models import Q, Value
-from django.db.models.functions import Concat
+from django.db.models.functions import Concat, Coalesce
 from django.shortcuts import render
 from inventory.models import order_form
 from inspections.models import inspection
@@ -38,8 +38,8 @@ def inventory(request):
     
     #for filter
     product_list = Product.objects.all().values_list('name', flat=True) 
-    qs = qs.annotate(totalqty=Sum('order__quantity'))
-    qs = qs.annotate(totalsum=Sum((1 - F('order__discount')) * F('order__quantity') * F('order__price'), output_field=FloatField()))
+    qs = qs.annotate(totalqty=Coalesce(Sum('order__quantity'),0))
+    qs = qs.annotate(totalsum=Coalesce(Sum((1 - F('order__discount')) * F('order__quantity') * F('order__price'), output_field=FloatField()),0))
     qs = qs.annotate(search_name=Concat('salespersonID__first_name', Value(' '), 'salespersonID__last_name'))
     
     name_contains_query = request.GET.get('name_contains')
