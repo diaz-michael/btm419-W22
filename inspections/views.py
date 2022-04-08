@@ -43,9 +43,9 @@ def inspection_update_view(request, id=None):
         ins = form.save(commit=False)
         messages.success(request, "Inspection updated successfully!")
         ins.save()
-        print("form saved")
-    else:
-        print("did not save")
+        # print("form saved")
+    # else:
+        # print("did not save")
     return render(request, "inspections/create-update.html", context) 
 
 def inspection_create_view(request):

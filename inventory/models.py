@@ -61,6 +61,7 @@ class order(models.Model):
     def get_absolute_url(self):
         return self.order_formID.get_absolute_url()
 
+    # Override save method to set price as current product price
     def save(self, *args, **kwargs):
         self.price = self.productID.price
         super(order, self).save(*args, **kwargs)

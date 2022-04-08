@@ -41,13 +41,12 @@ INSTALLED_APPS = [
     'django_htmx',
     'mathfilters',
     "debug_toolbar",
+    'crispy_forms',
 
     'background',
     'inspections',
     'inventory',
-    'crispy_forms',
     'reporting',
-    'datavis'
 ]
 
 MIDDLEWARE = [

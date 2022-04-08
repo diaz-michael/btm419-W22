@@ -20,7 +20,7 @@ def home(request):
             header = "Customer List"
             table_css_id = "table_db"
         else:
-            customers = Customer.objects.filter(email = request.user.email).annotate(inspection_count=Coalesce(Count('warranty__claim__inspection'),0))
+            customers = Customer.objects.filter(email = request.user.email).annotate(inspection_count=Coalesce(Count('warranty__claim__inspection'),0)) #Add inspection count to cust view
             customer = customers.first().first_name
             header = "Welcome " + customer + "!"
             table_css_id = "tableOne"
